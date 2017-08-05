@@ -36,7 +36,7 @@
 				this.graphics = Viva.Graph.View.svgGraphics();
 
 				this.defs = Viva.Graph.svg('defs');
-				this.graphics.getSvgRoot().append(defs);
+				this.graphics.getSvgRoot().append(this.defs);
 
 				//clip image to circle
 				const clippath = Viva.Graph.svg('clipPath')
