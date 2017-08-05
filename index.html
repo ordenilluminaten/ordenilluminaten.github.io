@@ -76,8 +76,7 @@
 
 			_loadCurrentProfile() {
 				VK.api("users.get", { "fields": "domain,photo_50" }, (data) => {
-					var res = data.response;
-					this._render([res])
+					this._render(data.response)
 					this.loadFriends(res.id);
 				});
 			}
@@ -85,7 +84,6 @@
 			_render(nodes, parentNodeId = null) {
 				this.graph.beginUpdate();
 				for (let node in nodes) {
-					node.id = node.id.toString();
 					//if not rendered
 					if (this.nodes[node.id] == null) {
 						this.nodes[node.id] = node;
