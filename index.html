@@ -69,6 +69,19 @@
 				const renderer = Viva.Graph.View.renderer(this.graph, {
 					graphics: this.graphics
 				});
+
+                var events = Viva.Graph.webglInputEvents(graphics, graph);
+                events.mouseEnter( (node) => {
+                    console.log('Mouse entered node: ' + node.id);
+                }).mouseLeave( (node) => {
+                    console.log('Mouse left node: ' + node.id);
+                }).dblClick( (node) => {
+                    console.log('Double click on node: ' + node.id);
+					_this.loadFriends(node.id);
+                }).click( (node) => {
+                    console.log('Single click on node: ' + node.id);
+                });
+
 				renderer.run();
 
 				this._loadCurrentProfile();
