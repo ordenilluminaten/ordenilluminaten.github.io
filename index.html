@@ -3,8 +3,20 @@
 
 <head>
 	<title>VivaGraphs constant layout demo page</title>
+	<style type="text/css" media="screen">
+		body,
+		html,
+		svg {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 	<script src="libs\vivagraphjs\vivagraph.min.js"></script>
-	<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 
 	<script type='text/javascript'>
 		class SocialGraphDrawer {
@@ -55,24 +67,27 @@
 				renderer.run();
 			}
 
-			render(parentNodeId){
+			render(parentNodeId) {
 				//TODO load friend list and render with link to parent node
 
 			}
 		}
 
-		window.onload = () => {
+		try {
+			VK.init(function () {
+				VK.api("friends.get", { "user_id": "2" }, function (data) {
+					alert("Post ID:" + data.response.count);
+				});
+				onInited();
+			},
+				function () {
+					alert('Cannot connect to vk.com')
+				}, '5.67');
+		} catch (e) {
+			window.location = 'https://vk.com/app6138281_46611989';
+		}
 
-VK.init(function() { 
-     // API initialization succeeded 
-     // Your code here 
-	 alert('success')
-  }, function() { 
-     // API initialization failed 
-     // Can reload page here 
-	  alert('error')
-}, '5.67');
-
+		function onInited() {
 			var graphics = Viva.Graph.View.svgGraphics();
 
 			var defs = Viva.Graph.svg('defs');
@@ -117,14 +132,14 @@ VK.init(function() {
 
 
 			constructGraph(graph);
-			setTimeout(function() {
+			setTimeout(function () {
 				test(graph)
 			}, 1000);
 		}
 
 		function constructGraph(graph) {
-			
-graph.beginUpdate();
+
+			graph.beginUpdate();
 			for (var i = 0; i < 101; i++) {
 				graph.addNode('n' + i, {
 					url: 'https://secure.gravatar.com/avatar/91bad8ceeec43ae303790f8fe238164b'
@@ -146,39 +161,25 @@ graph.beginUpdate();
 			}
 
 
-graph.endUpdate();
-			
+			graph.endUpdate();
+
 		}
 
-function test(graph){
-	graph.beginUpdate();
+		function test(graph) {
+			graph.beginUpdate();
 
-for (var i = 200; i < 300; i++) {
+			for (var i = 200; i < 300; i++) {
 				graph.addNode('n' + i, {
 					url: 'https://secure.gravatar.com/avatar/91bad8ceeec43ae303790f8fe238164b'
 				});
 
-				
+
 				graph.addLink('n199', 'n' + i);
-				
+
 			}
-	graph.endUpdate();
- }
-	</script>
-
-	<style type="text/css" media="screen">
-		body,
-		html,
-		svg {
-			width: 100%;
-			height: 100%;
-			overflow: hidden;
+			graph.endUpdate();
 		}
-	</style>
-</head>
-
-<body>
-
+	</script>
 </body>
 
 </html>
