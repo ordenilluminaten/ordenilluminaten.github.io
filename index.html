@@ -59,6 +59,11 @@
 						.attr('clip-path', "url(#clip)")
 						.link(node.data.url);
 					ui.append(image);
+
+					image.addEventListener("click", ()=>{
+						alert(node.id);
+					});
+ 				
 					return ui;
 				}).placeNode((nodeUI, pos) => {
 					// Shift image to let links go to the center:
@@ -72,13 +77,13 @@
 
 renderer.run();
 
-				var events = Viva.Graph.webglInputEvents(this.graphics, this.graph);
-				events.dblClick((node) => {
-					console.log('Double click on node: ' + node.id);
-					this.loadFriends(node.id);
-				}).click((node) => {
-					console.log('Single click on node: ' + node.id);
-				});
+				// var events = Viva.Graph.webglInputEvents(this.graphics, this.graph);
+				// events.dblClick((node) => {
+				// 	console.log('Double click on node: ' + node.id);
+				// 	this.loadFriends(node.id);
+				// }).click((node) => {
+				// 	console.log('Single click on node: ' + node.id);
+				// });
 
 				
 
