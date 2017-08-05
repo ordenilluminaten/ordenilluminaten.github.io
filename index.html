@@ -87,7 +87,7 @@
 				for (let node in nodes) {
 					//if not rendered
 					if (this.nodes[node.id] == null) {
-						this.nodes[node.id] = res;
+						this.nodes[node.id] = node;
 						this.graph.addNode(node.id, {
 							url: node.photo_50,
 						});
