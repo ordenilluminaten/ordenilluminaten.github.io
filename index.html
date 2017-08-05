@@ -70,6 +70,8 @@
 					graphics: this.graphics
 				});
 
+renderer.run();
+
 				var events = Viva.Graph.webglInputEvents(this.graphics, this.graph);
 				events.dblClick((node) => {
 					console.log('Double click on node: ' + node.id);
@@ -78,7 +80,7 @@
 					console.log('Single click on node: ' + node.id);
 				});
 
-				renderer.run();
+				
 
 				this._loadCurrentProfile();
 			}
