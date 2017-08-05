@@ -71,11 +71,7 @@
 				});
 
 				var events = Viva.Graph.webglInputEvents(this.graphics, this.graph);
-				events.mouseEnter((node) => {
-					console.log('Mouse entered node: ' + node.id);
-				}).mouseLeave((node) => {
-					console.log('Mouse left node: ' + node.id);
-				}).dblClick((node) => {
+				events.dblClick((node) => {
 					console.log('Double click on node: ' + node.id);
 					this.loadFriends(node.id);
 				}).click((node) => {
