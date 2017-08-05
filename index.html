@@ -76,8 +76,9 @@
 
 			_loadCurrentProfile() {
 				VK.api("users.get", { "fields": "domain,photo_50" }, (data) => {
-					this._render(data.response)
-					this.loadFriends(res.id);
+					var res = data.response;
+					this._render(res)
+					this.loadFriends(res[0].id);
 				});
 			}
 
