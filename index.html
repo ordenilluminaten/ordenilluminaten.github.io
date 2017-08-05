@@ -85,7 +85,6 @@
 			_render(nodes, parentNodeId = null) {
 				this.graph.beginUpdate();
 				for (let node of nodes) {
-					alert(JSON.stringify(node));
 					//if not rendered
 					if (this.nodes[node.id] == null) {
 						this.nodes[node.id] = node;
