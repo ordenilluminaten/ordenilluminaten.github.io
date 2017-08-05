@@ -85,6 +85,7 @@
 			_render(nodes, parentNodeId = null) {
 				this.graph.beginUpdate();
 				for (let node in nodes) {
+					node.id = node.id.toString();
 					//if not rendered
 					if (this.nodes[node.id] == null) {
 						this.nodes[node.id] = node;
