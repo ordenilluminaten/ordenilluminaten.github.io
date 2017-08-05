@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>VivaGraphs constant layout demo page</title>
+	<script src="libs\vivagraphjs\vivagraph.min.js"></script>
+	<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+
+	<script type='text/javascript'>
+		class SocialGraphDrawer {
+			constructor(vk) {
+				this.vk = vk;
+				this.initGraph();
+
+				this.nodes = {};
+			}
+
+			initGraph() {
+				this.graphics = Viva.Graph.View.svgGraphics();
+
+				this.defs = Viva.Graph.svg('defs');
+				graphics.getSvgRoot().append(defs);
+
+				//clip image to circle
+				const clippath = Viva.Graph.svg('clipPath')
+					.attr('id', 'clip')
+					.attr('patternUnits', "userSpaceOnUse");
+				const circle = Viva.Graph.svg('circle')
+					.attr('cx', '10')
+					.attr('cy', '10')
+					.attr('r', '10');
+				clippath.append(circle);
+				this.defs.append(clippath);
+
+				this.graphics.node((node) => {
+					const ui = Viva.Graph.svg('g');
+					const image = Viva.Graph.svg('image')
+						.attr('x', '0')
+						.attr('y', '0')
+						.attr('height', 20)
+						.attr('width', 20)
+						.attr('clip-path', "url(#clip)")
+						.link(node.data.url);
+					ui.append(image);
+					return ui;
+				}).placeNode((nodeUI, pos) => {
+					// Shift image to let links go to the center:
+					nodeUI.attr('transform', 'translate(' + (pos.x - 12) + ',' + (pos.y - 12) + ')');
+				});
+				this.graph = Viva.Graph.graph();
+
+				const renderer = Viva.Graph.View.renderer(this.graph, {
+					graphics: this.graphics
+				});
+				renderer.run();
+			}
+
+			render(parentNodeId){
+				//TODO load friend list and render with link to parent node
+
+			}
+		}
+
+		window.onload = () => {
+
+// VK.init(function() { 
+//      // API initialization succeeded 
+//      // Your code here 
+// 	 alert('success')
+//   }, function() { 
+//      // API initialization failed 
+//      // Can reload page here 
+// }, '5.67');
+
+			var graphics = Viva.Graph.View.svgGraphics();
+
+			var defs = Viva.Graph.svg('defs');
+			graphics.getSvgRoot().append(defs);
+
+			//clip image to circle
+			var clippath = Viva.Graph.svg('clipPath')
+				.attr('id', 'clip')
+				.attr('patternUnits', "userSpaceOnUse");
+			var circle = Viva.Graph.svg('circle')
+				.attr('cx', '10')
+				.attr('cy', '10')
+				.attr('r', '10');
+			clippath.append(circle);
+			defs.append(clippath);
+
+			graphics.node((node) => {
+				var radius = 10;
+				var ui = Viva.Graph.svg('g');
+				var image = Viva.Graph.svg('image')
+					.attr('x', '0')
+					.attr('y', '0')
+					.attr('height', radius * 2)
+					.attr('width', radius * 2)
+					.attr('clip-path', "url(#clip)")
+					.link(node.data.url);
+				ui.append(image);
+				return ui;
+			})
+				.placeNode((nodeUI, pos) => {
+					// Shift image to let links go to the center:
+					nodeUI.attr('transform', 'translate(' + (pos.x - 12) + ',' + (pos.y - 12) + ')');
+				});
+
+			var graph = Viva.Graph.graph();
+
+			var renderer = Viva.Graph.View.renderer(graph, {
+				graphics: graphics
+			});
+
+			renderer.run();
+
+
+			constructGraph(graph);
+			setTimeout(function() {
+				test(graph)
+			}, 1000);
+		}
+
+		function constructGraph(graph) {
+			
+graph.beginUpdate();
+			for (var i = 0; i < 101; i++) {
+				graph.addNode('n' + i, {
+					url: 'https://secure.gravatar.com/avatar/91bad8ceeec43ae303790f8fe238164b'
+				});
+
+				if (i > 0) {
+					graph.addLink('n0', 'n' + i);
+				}
+			}
+
+			for (var i = 100; i < 200; i++) {
+				graph.addNode('n' + i, {
+					url: 'https://secure.gravatar.com/avatar/91bad8ceeec43ae303790f8fe238164b'
+				});
+
+				if (i > 100) {
+					graph.addLink('n99', 'n' + i);
+				}
+			}
+
+
+graph.endUpdate();
+			
+		}
+
+function test(graph){
+	graph.beginUpdate();
+
+for (var i = 200; i < 300; i++) {
+				graph.addNode('n' + i, {
+					url: 'https://secure.gravatar.com/avatar/91bad8ceeec43ae303790f8fe238164b'
+				});
+
+				
+				graph.addLink('n199', 'n' + i);
+				
+			}
+	graph.endUpdate();
+ }
+	</script>
+
+	<style type="text/css" media="screen">
+		body,
+		html,
+		svg {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+
+</body>
+
+</html>
