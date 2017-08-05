@@ -76,7 +76,7 @@
 		try {
 			VK.init(function () {
 				VK.api("friends.get", { "user_id": "2" }, function (data) {
-					alert("Post ID:" + data.response.count);
+					alert("Post ID:" + data);
 				});
 				onInited();
 			},
