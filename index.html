@@ -26,7 +26,7 @@
 			}
 
 			loadFriends(nodeId) {
-				VK.api("friends.get", { "user_id": nodeId, "fields": "domain,photo_50" }, function (data) {
+				VK.api("friends.get", { "user_id": nodeId, "fields": "domain,photo_50" }, (data) => {
 					var res = data.response;
 					this._render(res.items, nodeId);
 				});
@@ -36,7 +36,7 @@
 				this.graphics = Viva.Graph.View.svgGraphics();
 
 				this.defs = Viva.Graph.svg('defs');
-				graphics.getSvgRoot().append(defs);
+				this.graphics.getSvgRoot().append(defs);
 
 				//clip image to circle
 				const clippath = Viva.Graph.svg('clipPath')
