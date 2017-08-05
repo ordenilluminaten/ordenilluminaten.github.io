@@ -26,7 +26,11 @@
 			}
 
 			loadFriends(nodeId) {
+				let node = this.nodes[nodeId];
+				if(node.friendsLoaded)
+					return;
 				VK.api("friends.get", { "user_id": nodeId, "fields": "domain,photo_50" }, (data) => {
+					node.friendsLoaded = true;
 					var res = data.response;
 					this._render(res.items, nodeId);
 				});
@@ -60,10 +64,10 @@
 						.link(node.data.url);
 					ui.append(image);
 
-					image.addEventListener("click", ()=>{
+					image.addEventListener("click", () => {
 						this.loadFriends(node.id);
 					});
- 				
+
 					return ui;
 				}).placeNode((nodeUI, pos) => {
 					// Shift image to let links go to the center:
@@ -75,18 +79,7 @@
 					graphics: this.graphics
 				});
 
-renderer.run();
-
-				// var events = Viva.Graph.webglInputEvents(this.graphics, this.graph);
-				// events.dblClick((node) => {
-				// 	console.log('Double click on node: ' + node.id);
-				// 	this.loadFriends(node.id);
-				// }).click((node) => {
-				// 	console.log('Single click on node: ' + node.id);
-				// });
-
-				
-
+				renderer.run();
 				this._loadCurrentProfile();
 			}
 
@@ -104,6 +97,7 @@ renderer.run();
 					//if not rendered
 					if (this.nodes[node.id] == null) {
 						this.nodes[node.id] = node;
+						node.friendsLoaded = false;
 						this.graph.addNode(node.id, {
 							url: node.photo_50,
 						});
