@@ -27,6 +27,7 @@
 
 			loadFriends(nodeId) {
 				VK.api("friends.get", { "user_id": nodeId, "fields": "domain,photo_50" }, (data) => {
+					debugger;
 					var res = data.response;
 					this._render(res.items, nodeId);
 				});
