@@ -62,7 +62,7 @@ class SocialGraphDrawer extends EventEmitter {
 			ui.append(image);
 
 			image.addEventListener("click", () => {
-				this.loadFriends(node.id);
+				// this.loadFriends(node.id);
 				this.emit("click", this.nodes[node.id]);
 			});
 
