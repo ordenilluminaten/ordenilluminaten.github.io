@@ -1,0 +1,27 @@
+{
+  "name": "socialgraph",
+  "description": "VK Social Graph Drawer",
+  "main": "",
+  "authors": [
+    "Штанько Михаил <orden.illuminaten@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ordenilluminaten/ordenilluminaten.github.io",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "vivagraphjs": "latest",
+    "materialize": "latest"
+  }
+}

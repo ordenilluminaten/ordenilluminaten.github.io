@@ -2,7 +2,16 @@
 <html>
 
 <head>
-	<title>VivaGraphs constant layout demo page</title>
+	<title>vk.com social graph</title>
+
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css" media="screen,projection"
+	/>
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<style type="text/css" media="screen">
 		body,
 		html,
@@ -15,113 +24,69 @@
 </head>
 
 <body>
+	<ul id="slide-out" class="side-nav">
+		<li>
+			<div class="user-view">
+				<div class="background">
+					<img src="http://materializecss.com/images/office.jpg">
+				</div>
+				<a id="user-link" target="_blank" href="#!user">
+					<img id="user-img" class="circle" src="">
+					<span id="user-name" class="white-text name"></span>
+					<span id="user-status" class="white-text email"></span>
+				</a>
+			</div>
+		</li>
+		<!-- <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+		<li><a href="#!">Second Link</a></li>
+		<li>
+			<div class="divider"></div>
+		</li> -->
+		<!-- <li><a class="subheader">Subheader</a></li> -->
+		<!-- <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>  -->
+	</ul>
+
 	<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
-	<script src="libs\vivagraphjs\vivagraph.min.js"></script>
+	<!--Import jQuery before materialize.js-->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="bower_components/materialize/dist/js/materialize.min.js"></script>
+	<script src="bower_components/vivagraphjs/dist/vivagraph.min.js"></script>
+	<script src="src/eventemitter.js"></script>
+	<script src="src/graphDrawer.js"></script>
 
 	<script type='text/javascript'>
-		class SocialGraphDrawer {
-			constructor() {
-				this.nodes = {};
-				this._initGraph();
+		window.onload = () => {
+			try {
+				VK.init(onInited,
+					function () {
+						alert('Cannot connect to vk.com')
+					}, '5.67');
+			} catch (e) {
+				onInited(true);
+				// window.location = 'https://vk.com/app6138281_46611989';
 			}
 
-			loadFriends(nodeId) {
-				let node = this.nodes[nodeId];
-				if(node.friendsLoaded)
-					return;
-				VK.api("friends.get", { "user_id": nodeId, "fields": "domain,photo_50" }, (data) => {
-					node.friendsLoaded = true;
-					var res = data.response;
-					this._render(res.items, nodeId);
-				});
-			}
-
-			_initGraph() {
-				this.graphics = Viva.Graph.View.svgGraphics();
-
-				this.defs = Viva.Graph.svg('defs');
-				this.graphics.getSvgRoot().append(this.defs);
-
-				//clip image to circle
-				const clippath = Viva.Graph.svg('clipPath')
-					.attr('id', 'clip')
-					.attr('patternUnits', "userSpaceOnUse");
-				const circle = Viva.Graph.svg('circle')
-					.attr('cx', '10')
-					.attr('cy', '10')
-					.attr('r', '10');
-				clippath.append(circle);
-				this.defs.append(clippath);
-
-				this.graphics.node((node) => {
-					const ui = Viva.Graph.svg('g');
-					const image = Viva.Graph.svg('image')
-						.attr('x', '0')
-						.attr('y', '0')
-						.attr('height', 20)
-						.attr('width', 20)
-						.attr('clip-path', "url(#clip)")
-						.link(node.data.url);
-					ui.append(image);
-
-					image.addEventListener("click", () => {
-						this.loadFriends(node.id);
-					});
-
-					return ui;
-				}).placeNode((nodeUI, pos) => {
-					// Shift image to let links go to the center:
-					nodeUI.attr('transform', 'translate(' + (pos.x - 12) + ',' + (pos.y - 12) + ')');
-				});
-				this.graph = Viva.Graph.graph();
-
-				const renderer = Viva.Graph.View.renderer(this.graph, {
-					graphics: this.graphics
-				});
-
-				renderer.run();
-				this._loadCurrentProfile();
-			}
-
-			_loadCurrentProfile() {
-				VK.api("users.get", { "fields": "domain,photo_50" }, (data) => {
-					var res = data.response;
-					this._render(res)
-					this.loadFriends(res[0].id);
-				});
-			}
-
-			_render(nodes, parentNodeId = null) {
-				this.graph.beginUpdate();
-				for (let node of nodes) {
-					//if not rendered
-					if (this.nodes[node.id] == null) {
-						this.nodes[node.id] = node;
-						node.friendsLoaded = false;
-						this.graph.addNode(node.id, {
-							url: node.photo_50,
-						});
-					}
-					if (parentNodeId != null) {
-						this.graph.addLink(parentNodeId, node.id);
-					}
-				}
-				this.graph.endUpdate();
-			}
+			// Initialize collapse button
+			$(".button-collapse").sideNav();
 		}
 
-		try {
-			VK.init(onInited,
-				function () {
-					alert('Cannot connect to vk.com')
-				}, '5.67');
-		} catch (e) {
-			window.location = 'https://vk.com/app6138281_46611989';
-		}
+		function onInited(demo = false) {
+			let drawer = new SocialGraphDrawer({ demo: demo });
+			drawer.on('inited', () => {
+				console.log('SocialGraphDrawer inited');
+			}).on('click', (node) => {
+				debugger;
+				let link = $('#user-link');
+				link.attr('href', `https://vk.com/${node.domain}`)
 
-		let drawer;
-		function onInited() {
-			drawer = new SocialGraphDrawer();
+				link.find('#user-img').attr('src', node.photo_200_orig);
+				link.find('#user-name').html(`${node.first_name} ${node.last_name}`);
+				link.find('#user-status').html(`'${node.status}'`);
+
+				$(".button-collapse").sideNav('show');
+			});
+
+			drawer.init();
 		}
 	</script>
 </body>
